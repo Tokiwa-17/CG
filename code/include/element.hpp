@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <queue>
 #include <cstdio>
+#include <algorithm>
 
 class Element {
 public:
@@ -21,7 +22,33 @@ public:
         // TODO: Implement Bresenham Algorithm
         printf("Draw a line from (%d, %d) to (%d, %d) using color (%f, %f, %f)\n", xA, yA, xB, yB,
                 color.x(), color.y(), color.z());
-        auto deltax = xB - xA, deltay = yB - yA;
+        // handle situations where slope > 1.
+        auto steep = abs(yB - yA) > abs(xB - xA);
+        if (steep) {
+            std::swap(xA, yA);
+            std::swap(xB, yB);
+        }
+        // handle situations where the line is of negative direction.
+        if (xA > xB) {
+            std::swap(xA, xB);
+            std::swap(yA, yB);
+        }
+        auto deltax = xB - xA, deltay = abs(yB - yA);
+        float err = 0.0f, deltaErr = static_cast<float>(deltay) / static_cast<float>(deltax);
+        auto y = yA;
+        auto yStep = yB > yA ? 1 : -1;
+        for (auto x = xA; x <= xB; x++) {
+            if (steep) {
+                img.SetPixel(x, y, color);
+            } else {
+                img.SetPixel(y, x, color);
+            }
+            err += deltaErr;
+            if (abs(err) >= 0.5) {
+                y += yStep;
+                err -= 1.0f;
+            }
+        }
     }
 };
 
