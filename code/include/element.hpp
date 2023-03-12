@@ -62,6 +62,27 @@ public:
         // TODO: Implement Algorithm to draw a Circle
         printf("Draw a circle with center (%d, %d) and radius %d using color (%f, %f, %f)\n", cx, cy, radius,
                color.x(), color.y(), color.z());
+        // draw 1/8 circle
+        auto x = 0, y = radius;
+        auto d = 1.25 - radius;
+        int rightBound = std::ceil(static_cast<float>(radius) / sqrt(2));
+        for (; x <= rightBound;) {
+            img.SetPixel(x + cx, y + cy, color);
+            img.SetPixel(x + cx, -y + cy, color);
+            img.SetPixel(-x + cx, y + cy, color);
+            img.SetPixel(-x + cx, -y + cy, color);
+            img.SetPixel(y + cx, x + cy, color);
+            img.SetPixel(y + cx, -x + cy, color);
+            img.SetPixel(-y + cx, x + cy, color);
+            img.SetPixel(-y + cx, -x + cy, color);
+            if (d < 0) {
+                d = d + 2 * x + 3;
+                x += 1;
+            } else {
+                d = d + 2 * x - 2 * y + 5;
+                x += 1, y -= 1;
+            }
+        }
     }
 };
 
