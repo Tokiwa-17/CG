@@ -6,9 +6,11 @@ if [[ ! -d build ]]; then
 else
   rm -rf build
 fi
-cmake -B build
-cmake --build build
-
+mkdir build
+cd build
+cmake ..
+make
+cd ..
 # Run all testcases.
 # You can comment some lines to disable the run of specific examples.
 mkdir -p output

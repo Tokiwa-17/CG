@@ -21,6 +21,7 @@ public:
         // TODO: Implement Bresenham Algorithm
         printf("Draw a line from (%d, %d) to (%d, %d) using color (%f, %f, %f)\n", xA, yA, xB, yB,
                 color.x(), color.y(), color.z());
+        auto deltax = xB - xA, deltay = yB - yA;
     }
 };
 
