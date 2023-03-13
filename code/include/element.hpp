@@ -5,6 +5,8 @@
 #include <queue>
 #include <cstdio>
 #include <algorithm>
+#include <queue>
+#include <utility>
 
 class Element {
 public:
@@ -39,9 +41,9 @@ public:
         auto yStep = yB > yA ? 1 : -1;
         for (auto x = xA; x <= xB; x++) {
             if (steep) {
-                img.SetPixel(x, y, color);
-            } else {
                 img.SetPixel(y, x, color);
+            } else {
+                img.SetPixel(x, y, color);
             }
             err += deltaErr;
             if (abs(err) >= 0.5) {
@@ -95,5 +97,20 @@ public:
         // TODO: Flood fill
         printf("Flood fill source point = (%d, %d) using color (%f, %f, %f)\n", cx, cy,
                 color.x(), color.y(), color.z());
+        std::queue<std::pair<int, int>> q;
+        q.push(std::make_pair(cx, cy));
+        Vector3f originColor = img.GetPixel(cx, cy);
+        while(!q.empty()) {
+            auto pos = q.front();
+            auto tx = pos.first, ty = pos.second;
+            q.pop();
+            if (tx < 0 || tx >= img.Width() || ty < 0 || ty >= img.Height() || img.GetPixel(pos.first, pos.second) != originColor) 
+                continue;
+            img.SetPixel(tx, ty, color);
+            q.push(std::make_pair(tx - 1, ty));
+            q.push(std::make_pair(tx + 1, ty));
+            q.push(std::make_pair(tx, ty - 1));
+            q.push(std::make_pair(tx, ty + 1));
+        }
     }
 };

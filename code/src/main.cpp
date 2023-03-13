@@ -15,7 +15,6 @@ int main(int argc, char *argv[]) {
         cout << "Usage: ./PA0 <input canvas file> <output pic path>" << endl;
         return 0;
     }
-
     CanvasParser canvasParser(argv[1]);
     Image renderedImg(canvasParser.getWidth(), canvasParser.getHeight());
     for (int ei = 0; ei < canvasParser.getNumElement(); ++ei) {
