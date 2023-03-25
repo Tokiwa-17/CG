@@ -44,11 +44,24 @@ public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &direction,
             const Vector3f &up, int imgW, int imgH, float angle) : Camera(center, direction, up, imgW, imgH) {
         // angle is in radian.
+        this -> angle = angle;
+        c.x() = imgW / 2;
+        c.y() = imgH / 2;
+        f.x() = width / 2 / tan(this -> angle / 2);
+        f.y() = height / 2 / tan(this -> angle / 2);
     }
 
     Ray generateRay(const Vector2f &point) override {
         // 
+        Vector3f dir((point.x() - c.x()) / f.x(), (point.y() - this -> c.y()) / f.y(), 1);
+        dir.normalize();
+        auto ori = this -> center;
+        auto R = Matrix3f(horizontal, -up, direction, true);
+        Ray(ori, R * dir);
     }
+    Vector2f c;
+    Vector2f f;
+    float angle;
 };
 
 #endif //CAMERA_H
