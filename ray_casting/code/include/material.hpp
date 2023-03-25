@@ -23,11 +23,19 @@ public:
         return diffuseColor;
     }
 
+    float clamp(float v) {
+        return v ? v >= 0 : 0.0f;
+    }
 
     Vector3f Shade(const Ray &ray, const Hit &hit,
                    const Vector3f &dirToLight, const Vector3f &lightColor) {
         Vector3f shaded = Vector3f::ZERO;
-        // 
+        auto kd = diffuseColor;
+        auto ks = specularColor;
+        auto V = -ray.getDirection().normalized();
+        auto N = hit.getNormal().normalized();
+        auto R = (2 * (Vector3f::dot(N, dirToLight) * N) - dirToLight).normalized();
+        shaded = lightColor * (kd * clamp(Vector3f::dot(dirToLight, N)) + ks * pow(clamp(Vector3f::dot(V, R)), shininess));
         return shaded;
     }
 

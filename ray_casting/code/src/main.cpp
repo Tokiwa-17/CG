@@ -34,29 +34,31 @@ int main(int argc, char *argv[]) {
     // the scene.  Write the color at the intersection to that
     // pixel in your output image.
     SceneParser sceneParser(argv[1]);
+    Image image(sceneParser.getCamera()->getWidth(), sceneParser.getCamera()->getHeight());
     auto camera = sceneParser.getCamera();
     int width = camera -> getWidth();
     int height = camera -> getHeight();
-    // for (int x = 0; x < width; ++x) {
-    //     for (int y = 0; y < height; ++y) {
-    //         Ray camRay = sceneParser.getCamera() -> generateRay(Vector2f(x, y));
-    //         Group* baseGroup = sceneParser.getGroup();
-    //         Hit hit;
-    //         bool isIntersect = baseGroup -> intersect(camRay, hit, 0);
-    //         if (isIntersect) {
-    //             Vector3f finalColor = Vector3f::ZERO;
-    //             for (int lightIdx = 0; lightIdx < sceneParser.getNumLights(); ++lightIdx) {
-    //                 Light * light = sceneParser.getLight(lightIdx);
-    //                 Vector3f L, lightColor;
-    //                 light -> getIllumination(camRay.pointAtParameter(hit.getT()), L, lightColor);
-    //                 finalColor += hit.getMaterial() -> Shade(camRay, hit, L, lightColor);
-    //             }
-    //             setPixel(x, y, finalColor);
-    //         } else {
-    //             setPixel(x, y, sceneParser.getBackgroundColor());
-    //         }
-    //     }
-    // }
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            Ray camRay = sceneParser.getCamera() -> generateRay(Vector2f(x, y));
+            Group* baseGroup = sceneParser.getGroup();
+            Hit hit;
+            bool isIntersect = baseGroup -> intersect(camRay, hit, 0);
+            if (isIntersect) {
+                Vector3f finalColor = Vector3f::ZERO;
+                for (int lightIdx = 0; lightIdx < sceneParser.getNumLights(); ++lightIdx) {
+                    Light * light = sceneParser.getLight(lightIdx);
+                    Vector3f L, lightColor;
+                    light -> getIllumination(camRay.pointAtParameter(hit.getT()), L, lightColor);
+                    finalColor += hit.getMaterial() -> Shade(camRay, hit, L, lightColor);
+                }
+                image.SetPixel(x, y, finalColor);
+            } else {
+                image.SetPixel(x, y, sceneParser.getBackgroundColor());
+            }
+        }
+    }
+    image.SaveImage(argv[2]);
     cout << "Hello! Computer Graphics!" << endl;
     return 0;
 }
