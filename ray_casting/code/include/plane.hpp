@@ -15,19 +15,29 @@ public:
 
     }
 
-    Plane(const Vector3f &normal, float d, Material *m) : Object3D(m) {
-
+    Plane(const Vector3f &normal, float d, Material *m) : Object3D(m), d(d) {
+        this->normal = normal.normalized();
     }
 
     ~Plane() override = default;
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        return false;
+        /**
+        \brief Compute the intersection between a ray and a plane.
+        */
+        auto R0 = r.getOrigin();
+        auto Rd = r.getDirection();
+        float t = - (this -> d + Vector3f::dot(normal, R0) / (Vector3f::dot(normal, Rd)));
+        if (t > 0 && t > tmin && t < h.getT()) {
+            h.set(t, this -> material, this -> normal);
+            return true;
+        }
+        else return false;
     }
 
 protected:
-
-
+    Vector3f normal;
+    float d;
 };
 
 #endif //PLANE_H
