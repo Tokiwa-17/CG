@@ -27,7 +27,7 @@ public:
 		 \brief computer intersection between a triangle and a ray.
 		*/
 		auto ori = ray.getOrigin();
-		auto dir = ray.getDirection().normalized();
+		auto dir = ray.getDirection();
 		auto s = ori - vertices[0];
 		auto e1 = vertices[1] - vertices[0];
 		auto e2 = vertices[2] - vertices[0];
@@ -39,12 +39,13 @@ public:
 		auto gamma = deno * Vector3f::dot(s2, dir);
 		auto alpha = 1 - beta - gamma;
 		bool valid = alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1;
-		if (valid && t < hit.getT() && t > tmin) {
+		if (valid && t >= 0 && t < hit.getT() && t > tmin) {
 			hit.set(t, this -> material, this -> normal);
 			return true;
 		} 
 		else return false;
 	}
+	
 	Vector3f normal;
 	Vector3f vertices[3];
 protected:

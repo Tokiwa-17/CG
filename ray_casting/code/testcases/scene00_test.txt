@@ -34,34 +34,11 @@ Materials {
 }
 
 Group {
-    numObjects 6
+    numObjects 1
     MaterialIndex 0
     Sphere {
 	center 0 0 0
         radius 1 
-    }
-    MaterialIndex 1
-    Sphere {
-	center 1 1 1 
-        radius 0.75
-    }
-    Sphere {
-	center -1 -1 1 
-        radius 0.75
-    }
-    MaterialIndex 2
-    Sphere {
-	center -1 1 -1 
-        radius 0.75
-    }
-    Sphere {
-	center 1 -1 -1 
-        radius 0.75 
-    }
-    MaterialIndex 3
-    Plane {
-	normal 0 1 0
-        offset -2
     }
 }
 

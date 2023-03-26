@@ -24,7 +24,7 @@ public:
     }
 
     float clamp(float v) {
-        return v ? v >= 0 : 0.0f;
+        return v > 0.0f ? v : 0.0f;
     }
 
     Vector3f Shade(const Ray &ray, const Hit &hit,
