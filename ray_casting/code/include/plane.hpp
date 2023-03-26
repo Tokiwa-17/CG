@@ -15,8 +15,7 @@ public:
 
     }
 
-    Plane(const Vector3f &normal, float d, Material *m) : Object3D(m), d(d) {
-        this->normal = normal.normalized();
+    Plane(const Vector3f &normal, float d, Material *m) : Object3D(m), d(d), normal(normal) {
     }
 
     ~Plane() override = default;
@@ -25,11 +24,11 @@ public:
         /**
         \brief Compute the intersection between a ray and a plane.
         */
-        auto R0 = r.getOrigin();
-        auto Rd = r.getDirection();
-        float t = - (this -> d + Vector3f::dot(normal, R0) / (Vector3f::dot(normal, Rd)));
-        if (t > 0 && t > tmin && t < h.getT()) {
-            h.set(t, this -> material, this -> normal);
+        Vector3f R0 = r.getOrigin();
+        Vector3f Rd = r.getDirection();
+        float t = (d + Vector3f::dot(normal, R0)) / (Vector3f::dot(normal, Rd));
+        if (t >= 0 && t >= tmin && t < h.getT()) {
+            h.set(t, material, normal);
             return true;
         }
         else return false;

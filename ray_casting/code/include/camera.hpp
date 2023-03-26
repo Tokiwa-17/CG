@@ -47,17 +47,16 @@ public:
         this -> angle = angle;
         c.x() = imgW / 2;
         c.y() = imgH / 2;
-        f.x() = width / 2 / tan(this -> angle / 2);
-        f.y() = height / 2 / tan(this -> angle / 2);
+        f.x() = width / 2 / tan(angle / 2);
+        f.y() = height / 2 / tan(angle / 2);
     }
 
     Ray generateRay(const Vector2f &point) override {
         // 
-        Vector3f dir((point.x() - c.x()) / f.x(), (point.y() - this -> c.y()) / f.y(), 1);
+        Vector3f dir((point.x() - c.x()) / f.x(), (c.y() - point.y()) / f.y(), 1);
         dir.normalize();
-        auto ori = this -> center;
-        auto R = Matrix3f(horizontal, -up, direction, true);
-        Ray(ori, R * dir);
+        auto R = Matrix3f(horizontal, -up, direction);
+        return Ray(center, R * dir);
     }
     Vector2f c;
     Vector2f f;

@@ -34,8 +34,9 @@ public:
         auto ks = specularColor;
         auto V = -ray.getDirection().normalized();
         auto N = hit.getNormal().normalized();
-        auto R = (2 * (Vector3f::dot(N, dirToLight) * N) - dirToLight).normalized();
-        shaded = lightColor * (kd * clamp(Vector3f::dot(dirToLight, N)) + ks * pow(clamp(Vector3f::dot(V, R)), shininess));
+        auto L = dirToLight.normalized();
+        auto R = (2 * (Vector3f::dot(N, L) * N) - L).normalized();
+        shaded = lightColor * (kd * clamp(Vector3f::dot(L, N)) + ks * pow(clamp(Vector3f::dot(V, R)), shininess));
         return shaded;
     }
 

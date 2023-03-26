@@ -20,34 +20,30 @@ public:
 
     explicit Group (int num_objects) {
         this -> objNum = num_objects;
-        this -> objList.assign(this -> objNum, nullptr);
     }
 
     ~Group() override {
-        for (auto obj : objList) {
-            delete(obj);
-        }
+
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         bool flag = false;
         for (auto obj : objList) {
-            if(obj -> intersect(r, h, tmin))
-                flag = true;
+            if(obj -> intersect(r, h, tmin)) flag = true;
         }
         return flag;
     }
 
     void addObject(int index, Object3D *obj) {
-        this -> objList[index] = obj;
+        objList.push_back(obj);
     }
 
     int getGroupSize() {
-        return this -> objNum;
+        return objList.size();
     }
 
 private:
-    vector<Object3D*> objList;
+    std::vector<Object3D*> objList;
     int objNum = 0;
 };
 
